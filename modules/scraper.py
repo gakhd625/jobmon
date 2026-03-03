@@ -28,7 +28,7 @@ from playwright.async_api import async_playwright, Page, BrowserContext
 logger = logging.getLogger(__name__)
 
 # ── Selectors ────────────────────────────────────────────────────────────────
-LOGIN_URL       = "https://www.onlinejobs.ph/jobseekers/auth/login"
+LOGIN_URL       = "https://www.onlinejobs.ph/login"
 JOBS_URL        = "https://www.onlinejobs.ph/jobseekers/joblist"
 
 # Update these if login selectors change
