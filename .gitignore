@@ -1,0 +1,22 @@
+# Secrets – NEVER commit these
+.env
+
+# Python artefacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+.venv/
+
+# Runtime data (persisted on EC2 EBS, not in git)
+data/
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/

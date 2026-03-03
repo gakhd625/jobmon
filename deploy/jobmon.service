@@ -1,0 +1,41 @@
+# deploy/jobmon.service
+# ──────────────────────────────────────────────────────────────────
+# systemd service for the OnlineJobsPH Job Monitor.
+#
+# INSTALL:
+#   sudo cp deploy/jobmon.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable jobmon.service   # auto-start on boot
+#   sudo systemctl start jobmon.service
+#
+# STATUS / LOGS:
+#   sudo systemctl status jobmon
+#   journalctl -u jobmon -f
+# ──────────────────────────────────────────────────────────────────
+
+[Unit]
+Description=OnlineJobsPH Job Monitor Bot
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+
+# ── Change these paths to match your actual deployment ──
+User=ubuntu
+WorkingDirectory=/home/ubuntu/jobmon
+ExecStart=/home/ubuntu/jobmon/venv/bin/python monitor.py
+
+# Restart behaviour (for oneshot, use the timer instead – see jobmon.timer)
+StandardOutput=journal
+StandardError=journal
+
+# Environment file (can also live in WorkingDirectory/.env)
+EnvironmentFile=/home/ubuntu/jobmon/.env
+
+# Safety hardening (optional but recommended)
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,33 @@
+# deploy/jobmon.timer
+# ──────────────────────────────────────────────────────────────────
+# systemd timer – runs the jobmon.service every 30 minutes.
+# This is the recommended way to schedule the bot on EC2.
+#
+# INSTALL (after installing jobmon.service):
+#   sudo cp deploy/jobmon.timer /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable jobmon.timer
+#   sudo systemctl start jobmon.timer
+#
+# CHECK TIMER STATUS:
+#   systemctl list-timers --all | grep jobmon
+# ──────────────────────────────────────────────────────────────────
+
+[Unit]
+Description=Run OnlineJobsPH Job Monitor every 30 minutes
+Requires=jobmon.service
+
+[Timer]
+# Wait 2 minutes after boot before first run (lets networking stabilise)
+OnBootSec=2min
+
+# Then run every 30 minutes
+OnUnitActiveSec=30min
+
+# If the system was off when a run was due, run it immediately on next boot
+Persistent=true
+
+Unit=jobmon.service
+
+[Install]
+WantedBy=timers.target
