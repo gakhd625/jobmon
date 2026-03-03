@@ -39,7 +39,13 @@ async def _login(page: Page, email: str, password: str) -> bool:
         logger.info("Navigating to login page …")
 
         # ✅ Increased timeout
-        await page.goto(LOGIN_URL, wait_until="networkidle", timeout=60_000)
+        await page.goto(LOGIN_URL, wait_until="domcontentloaded", timeout=60_000)
+
+        # Debug: wait extra time for JS
+        await asyncio.sleep(5)
+
+        # Debug: take screenshot to see what page actually loaded
+        await page.screenshot(path="login_debug.png")
 
         # ✅ IMPORTANT: Wait for email field BEFORE filling
         await page.wait_for_selector(EMAIL_SEL, timeout=60_000)
@@ -142,7 +148,7 @@ async def scrape_jobs(email: str, password: str, limit: int = 5) -> list[dict]:
 
         # ✅ Headless safe for EC2
         browser = await pw.chromium.launch(
-            headless=True,
+            headless=False,
             args=["--no-sandbox", "--disable-dev-shm-usage"],
         )
 
